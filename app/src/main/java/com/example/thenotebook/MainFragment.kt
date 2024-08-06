@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.thenotebook.databinding.FragmentMainBinding
@@ -32,7 +31,7 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
-        adapter = NoteAdapter()
+        adapter = NoteAdapter(::onNoteClicked)
         return binding.root
     }
 
@@ -49,7 +48,7 @@ class MainFragment : Fragment() {
     }
 
     private fun bindObservers() {
-        noteViewModel.notesLiveData.observe(viewLifecycleOwner, Observer {
+        noteViewModel.notesLiveData.observe(viewLifecycleOwner){
             binding.progressBar.isVisible = false
             when (it) {
                 is NetworkResult.Success -> {
@@ -63,7 +62,7 @@ class MainFragment : Fragment() {
                     binding.progressBar.isVisible = true
                 }
             }
-        })
+        }
     }
 
     private fun onNoteClicked(noteResponse: NoteResponse){
