@@ -11,21 +11,25 @@ import androidx.navigation.fragment.findNavController
 import com.example.thenotebook.databinding.FragmentLoginBinding
 import com.example.thenotebook.models.UserRequest
 import com.example.thenotebook.utils.NetworkResult
+import com.example.thenotebook.utils.TokenManager
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
 
-    private var _binding:FragmentLoginBinding? = null
+    private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
     private val authViewModel by viewModels<AuthViewModel>()
+    @Inject
+    lateinit var tokenManager: TokenManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentLoginBinding.inflate(inflater,container,false)
+        _binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -34,9 +38,9 @@ class LoginFragment : Fragment() {
 
         binding.btnLogin.setOnClickListener {
             val validationResult = validateUserInput()
-            if (validationResult.first){
+            if (validationResult.first) {
                 authViewModel.loginUser(getUserRequest())
-            }else{
+            } else {
                 binding.txtError.text = validationResult.second
             }
         }
@@ -46,15 +50,22 @@ class LoginFragment : Fragment() {
         }
         bindObserver()
     }
-    private fun getUserRequest(): UserRequest{
+
+    private fun getUserRequest(): UserRequest {
         val emailAddress = binding.txtEmail.text.toString()
         val password = binding.txtPassword.text.toString()
-        return UserRequest(emailAddress,password,"")
+        val username = ""
+        return UserRequest(emailAddress, password, username)
     }
 
     private fun validateUserInput(): Pair<Boolean, String> {
         val userRequest = getUserRequest()
-        return authViewModel.validatecredentials(userRequest.username,userRequest.email,userRequest.password, true)
+        return authViewModel.validatecredentials(
+            userRequest.username,
+            userRequest.email,
+            userRequest.password,
+            true
+        )
     }
 
     private fun bindObserver() {
@@ -62,7 +73,7 @@ class LoginFragment : Fragment() {
             binding.progressBar.isVisible = false
             when (it) {
                 is NetworkResult.Success -> {
-                    //token
+                    tokenManager.saveToken(it.data!!.token)
                     findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
                 }
 
@@ -76,8 +87,6 @@ class LoginFragment : Fragment() {
             }
         }
     }
-
-
 
     override fun onDestroyView() {
         super.onDestroyView()
