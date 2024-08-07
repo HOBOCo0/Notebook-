@@ -44,6 +44,12 @@ class MainFragment : Fragment() {
         binding.addNote.setOnClickListener {
             findNavController().navigate(R.id.action_mainFragment_to_noteFragment)
         }
+        binding.btnSignOut.setOnClickListener {
+            val registerFragment = RegisterFragment()
+            val fragmentTransaction = parentFragmentManager.beginTransaction()
+            fragmentTransaction.replace(R.id.nav_hostfragment, registerFragment)
+                .commit()
+        }
         bindObservers()
     }
 
