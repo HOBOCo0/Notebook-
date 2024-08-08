@@ -2,7 +2,8 @@
 
 # Notebook
 
-A simple NoteBook app in Android with Integrated API. Where you can store/save your notes and access it from any android mobile device.
+A simple NoteBook app in Android with Integrated API. Where you can store/save your notes and access it from any android mobile device. 
+Used best practices and modern Android dev tools and liberaries. 
 
 
 ## Features
