@@ -31,6 +31,9 @@ Self made Api used for fetching and storing the noes with   login and signup fun
   
 - https://github.com/HOBOCo0/Notes-API
 
+## To DO
+
+- Offline Functionality: local storage to enable offline access and automatic synchronization, allowing users to save new notes offline and have them uploaded automatically when the app is back online."
 
 ## 🔗 Links
 
